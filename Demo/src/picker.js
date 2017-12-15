@@ -1,20 +1,21 @@
-'use strict';
+"use strict";
 
-import React, { Component } from 'react'
-import Picker from 'react-native-wheel-picker'
-const PickerItem = Picker.Item
-import _ from 'lodash'
+import React, { Component } from "react";
+import Picker from "react-native-wheel-picker";
+const PickerItem = Picker.Item;
+import _ from "lodash";
+import PropTypes from "prop-types";
 
 const styles = {
   picker: {
-    backgroundColor: '#d3d3d3',
+    backgroundColor: "#d3d3d3",
     height: 220
   },
   picker__item: {
-    color: '#333333',
+    color: "#333333",
     fontSize: 26
   }
-}
+};
 
 export default class PickerContainer extends Component {
   constructor(props) {
@@ -25,14 +26,14 @@ export default class PickerContainer extends Component {
   }
 
   static propTypes = {
-    onValueChange: React.PropTypes.func,
-    pickerData: React.PropTypes.array,
-    selectedValue: React.PropTypes.any
-  }
+    onValueChange: PropTypes.func,
+    pickerData: PropTypes.array,
+    selectedValue: PropTypes.any
+  };
 
   static defaultProps = {
     pickerData: []
-  }
+  };
 
   render() {
     return (
@@ -40,20 +41,23 @@ export default class PickerContainer extends Component {
         style={[styles.picker, this.props.style]}
         itemStyle={_.assign({}, styles.picker__item, this.props.itemStyle)}
         selectedValue={this.state.selectedValue}
-        onValueChange={(value) => {
-          this.setState({ selectedValue: value })
-          this.props.onValueChange && this.props.onValueChange( value )
+        onValueChange={value => {
+          this.setState({ selectedValue: value });
+          this.props.onValueChange && this.props.onValueChange(value);
         }}
       >
         {this.props.pickerData.map((data, index) => (
-            <PickerItem key={index} value={data.value || data} label={data.label || data.toString()} />
-          )
-        )}
+          <PickerItem
+            key={index}
+            value={data.value || data}
+            label={data.label || data.toString()}
+          />
+        ))}
       </Picker>
-    )
+    );
   }
 
   getValue() {
-    return this.state.selectedValue
+    return this.state.selectedValue;
   }
 }
