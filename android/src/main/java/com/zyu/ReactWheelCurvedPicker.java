@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import com.aigestudio.wheelpicker.core.AbstractWheelPicker;
 import com.aigestudio.wheelpicker.view.WheelCurvedPicker;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.DynamicFromArray;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -27,7 +29,7 @@ import java.util.List;
 public class ReactWheelCurvedPicker extends WheelCurvedPicker {
 
     private final EventDispatcher mEventDispatcher;
-    private List<Integer> mValueData;
+    private List<Dynamic> mValueData;
 
     public ReactWheelCurvedPicker(ReactContext reactContext) {
         super(reactContext);
@@ -72,7 +74,7 @@ public class ReactWheelCurvedPicker extends WheelCurvedPicker {
 		mHandler.post(this);
     }
 
-    public void setValueData(List<Integer> data) {
+    public void setValueData(List<Dynamic> data) {
         mValueData = data;
     }
 
@@ -85,9 +87,9 @@ class ItemSelectedEvent extends Event<ItemSelectedEvent> {
 
     public static final String EVENT_NAME = "wheelCurvedPickerPageSelected";
 
-    private final int mValue;
+    private final Dynamic mValue;
 
-    protected ItemSelectedEvent(int viewTag,  int value) {
+    protected ItemSelectedEvent(int viewTag,  Dynamic value) {
         super(viewTag);
         mValue = value;
     }
@@ -104,7 +106,23 @@ class ItemSelectedEvent extends Event<ItemSelectedEvent> {
 
     private WritableMap serializeEventData() {
         WritableMap eventData = Arguments.createMap();
-        eventData.putInt("data", mValue);
-        return eventData;
+        try {
+            Integer test = mValue.asInt();
+            eventData.putInt("data", mValue.asInt());
+            return eventData;
+        } catch(Exception e){
+
+        }
+        try {
+            String test = mValue.asString();
+            eventData.putString("data", mValue.asString());
+            return eventData;
+        } catch(Exception e){
+
+        }
+
+
+        throw new IllegalArgumentException("Unknown event type");
+
     }
 }
